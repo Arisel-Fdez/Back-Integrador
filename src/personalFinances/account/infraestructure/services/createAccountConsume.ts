@@ -5,7 +5,7 @@ export async function startAccountConsumer(useCase:CreateAccountUseCase) {
     
     const { connection, channel, queueName } = await setupRabbitMQ();
 
-    console.log('Consumidor de Órdenes esperando mensajes...');
+    console.log('esperando mensajes...');
 
     // Consume mensajes de la cola
     channel.consume(queueName, (msg) => {
@@ -15,7 +15,7 @@ export async function startAccountConsumer(useCase:CreateAccountUseCase) {
             const currentDateTime = new Date();
             // Lógica para procesar la orden pagada
 
-            console.log('Mensaje recibido [Y]', content )
+            console.log('Mensaje[Y]', content )
             const userId = content.data.id;
 
             useCase.run(userId);

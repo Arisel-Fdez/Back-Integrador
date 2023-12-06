@@ -1,7 +1,7 @@
 import amqp from 'amqplib';
 
 export async function setupRabbitMQ() {
-    const connection = await amqp.connect('amqp://b-9d29a2d4-604e-4ebd-92c1-39952aad2d85.mq.us-east-1.amazonaws.com:5671');
+    const connection = await amqp.connect('amqps://b-9d29a2d4-604e-4ebd-92c1-39952aad2d85.mq.us-east-1.amazonaws.com:5671');
     const channel = await connection.createChannel();
 
     const queueName = 'act-queue';

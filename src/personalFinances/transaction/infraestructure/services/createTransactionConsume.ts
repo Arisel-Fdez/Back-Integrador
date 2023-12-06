@@ -5,7 +5,7 @@ export async function startOrderConsumer(useCase: CreateTransactionUseCase) {
 
     const { connection, channel, queueName } = await setupRabbitMQ();
 
-    console.log('Consumidor de Órdenes esperando mensajes...');
+    console.log('esperando mensajes...');
 
     // Consume mensajes de la cola
     channel.consume(queueName, (msg) => {
