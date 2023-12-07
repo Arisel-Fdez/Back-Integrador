@@ -1,5 +1,5 @@
-import { LikeController } from "../infraestructure/controller/likeController";
-import { PgsqlLikeRepository } from "../infraestructure/pgsqlLikeRepository";
+import { LikeController } from "./controller/likeController";
+import { PgsqlLikeRepository } from "./pgsqlLikeRepository";
 import { LikeUseCase } from "../application/likeUseCase";
 
 
