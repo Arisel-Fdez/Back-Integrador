@@ -13,7 +13,7 @@ export class ReduceBalanceController {
             if (result instanceof Error||!result) {
                 return res.status(404).send({
                     status: "error",
-                    message: "Error al encontrar la cuenta asociada",
+                    message: result.message,
                 });
             }
             return res.status(200).send({
@@ -24,7 +24,7 @@ export class ReduceBalanceController {
         } catch (Error) {
             return res.status(500).send({
                 status: "error",
-                message: "Error al encontrar realizar la transaccion",
+                message: "Error al realizar la transaccion",
             });
         }
     }

@@ -1,21 +1,18 @@
 import { Account } from "../domain/account";
 import { AccountRepository } from "../domain/accountRepository";
 import { RabbitMQService } from "./services/rabbit";
+import { Validator } from "../domain/validations/validateData";
 
 export class AddBalanceUseCase {
     constructor(readonly accountRepository: AccountRepository, readonly rabbit: RabbitMQService) { }
-    async run(userId: number, balance: number, description: string, categoryId: number): Promise<Account | Error | String> {
+    async run(userId: number, balance: number, description: string, categoryId: number): Promise<Account> {
         try {
-            if (!userId || !balance || balance < 1 || !description || !categoryId) {
-                return new Error('Se deben rellenar todos los campos');
-            }
 
             await this.rabbit.connect();
             const addBalance = await this.accountRepository.addBalance(userId, balance, "", 0);
-            if (addBalance instanceof Error || addBalance === null) {
-                return new Error('No se pudo agregar balance la cuenta');
-            }
 
+            let orderValidate = new Validator<Account>(addBalance);
+            await orderValidate.invalidIfHasErrors();
             const data = {
                 id: addBalance.id,
                 balance: balance,
@@ -28,7 +25,7 @@ export class AddBalanceUseCase {
 
             return addBalance;
         } catch (error: any) {
-            return new Error('Error al agregar balance: ' + error.message);
+            throw new Error('Error al agregar balance: ' + error.message);
         }
     }
 }

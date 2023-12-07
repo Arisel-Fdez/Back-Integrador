@@ -10,11 +10,10 @@ export class CreateAccountController {
 
             const result = await this.createAccountUseCase.run(id);
 
-            if (result instanceof Error) {
-                return res.status(200).send({
-                    status: "success",
-                    data: result,
-                    message: "Balance actualizado con éxito",
+            if (result instanceof Error||!result) {
+                return res.status(404).send({
+                    status: "error",
+                    message: result.message,
                 });
             }
 

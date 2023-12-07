@@ -10,11 +10,10 @@ export class GetAccountBalanceController {
 
             const result = await this.getAccountBalanceUseCase.run(parseInt(id), userId);
 
-            if (result instanceof Error) {
+            if (result instanceof Error||!result) {
                 return res.status(404).send({
                     status: "error",
-                    data: result,
-                    message: "Error al encontrar la cuenta asociada",
+                    message: result.message,
                 });
             }
 

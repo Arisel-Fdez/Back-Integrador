@@ -10,10 +10,10 @@ export class DeleteAccountController {
 
             const result = await this.deleteAccountUseCase.run(parseInt(userId));
 
-            if (result instanceof Error) {
+            if (result instanceof Error||!result) {
                 return res.status(404).send({
                     status: "error",
-                    message: "Error al encontrar la cuenta asociada",
+                    message: result.message,
                 });
             }
             return res.status(200).send({

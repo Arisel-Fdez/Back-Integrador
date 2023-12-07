@@ -1,6 +1,7 @@
 import signale from 'signale';
 import { Transaction } from '../domain/transaction';
 import { TransactionRepository } from '../domain/transactionRepository';
+import { Validator } from "../domain/validations/validateData";
 
 export class CreateTransactionUseCase {
     constructor(private readonly transactionRepository: TransactionRepository) { }
@@ -12,16 +13,11 @@ export class CreateTransactionUseCase {
       description: string,
       categoriId: number,
       accountId: number
-    ): Promise<Transaction | Error | string> {
+    ): Promise<Transaction> {
       try {
         console.log('first', date, type, amount, description, categoriId, accountId);
   
-        if (!date || type === null || !amount || !description || !categoriId || !accountId) {
-          console.log('alv todo')
-          return new Error('Falta indormacion');
-        }
-  
-        const createTransaction = await this.transactionRepository.createTransaction(
+        const createdTransaction = await this.transactionRepository.createTransaction(
           date,
           type,
           amount,
@@ -29,14 +25,12 @@ export class CreateTransactionUseCase {
           categoriId,
           accountId
         );
-  console.log('createTransaction', createTransaction)
-        if (createTransaction instanceof Error) {
-          return new Error('No se pudo encontrar la transaccion');
-        }
-  
-        return createTransaction;
+        let orderValidate = new Validator<Transaction>(createdTransaction);
+        await orderValidate.invalidIfHasErrors();
+
+        return createdTransaction;
       } catch (error: any) {
-        return new Error('Error al encontrar la transaccion: ' + error.message);
+        throw new Error('Error al crear la transacción: ' + error.message);
       }
     }
-  }
+}

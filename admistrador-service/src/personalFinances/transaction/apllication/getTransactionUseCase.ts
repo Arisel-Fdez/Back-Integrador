@@ -1,5 +1,6 @@
 import { Transaction } from '../domain/transaction';
 import { TransactionRepository } from '../domain/transactionRepository';
+import { Validator } from "../domain/validations/validateData";
 
 export class GetTransactionUseCase {
 
@@ -8,13 +9,14 @@ export class GetTransactionUseCase {
     async run(
         id: number,
         accountId: number 
-    ): Promise<Transaction | Error | string> {
+    ): Promise<Transaction> {
         try {
-            if (!id || !accountId) {
-                return new Error('No se pudo recuperar ninguna informacion');
-            }
 
             const transaccion = await this.transactionRepository.getTransaction(id, accountId);
+
+            let orderValidate = new Validator<Transaction>(transaccion);
+            await orderValidate.invalidIfHasErrors();
+
             return transaccion;
         } catch (Error: any) {
             return new Error('Error al listar las transacciones: ' + Error.message);

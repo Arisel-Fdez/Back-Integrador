@@ -1,11 +1,15 @@
 import express from "express";
-import { addBalanceController,
+import {
+    addBalanceController,
     getAccountBalanceController,
     reduceBalanceController,
     getAllAccountsController,
-    deleteAccountController } from "./dependencies";
+    deleteAccountController
+} from "./dependencies";
+import { authMiddleware } from "../../../auth/middlewares/authMiddleware";
 
 export const accountRouter = express.Router();
+accountRouter.use(authMiddleware);
 
 accountRouter.put(
     "/balance/add/:userId",

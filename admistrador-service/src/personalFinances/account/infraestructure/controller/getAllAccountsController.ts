@@ -8,10 +8,10 @@ export class GetAllAccountsController {
         try {
 
             const result = await this.getAllAccountsUseCase.run();
-            if (result instanceof Error) {
+            if (result instanceof Error||!result) {
                 return res.status(404).send({
                     status: "error",
-                    message: "Error al encontrar la cuenta asociada",
+                    message: result,
                 });
             }
 

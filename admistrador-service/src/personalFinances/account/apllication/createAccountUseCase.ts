@@ -1,20 +1,19 @@
 import { Account } from "../domain/account";
 import { AccountRepository } from "../domain/accountRepository";
+import { Validator } from "../domain/validations/validateData";
 
 export class CreateAccountUseCase {
     constructor(readonly accountRepository: AccountRepository) { }
-    async run(userId: number): Promise<Account | Error> {
+    async run(userId: number): Promise<Account> {
         try {
-            if (!userId) {
-                return new Error('No se pudo crear la cuenta');
-            }
+            
             const createdAccount = await this.accountRepository.createAccount(userId);
-            if (createdAccount === null) {
-                return new Error('No se pudo crear la cuenta');
-            }
+
+            let orderValidate = new Validator<Account>(createdAccount);
+            await orderValidate.invalidIfHasErrors();
             return createdAccount;
         } catch (Error: any) {
-            return new Error('Error al crear la cuenta: ' + Error.message);
+            throw new Error('Error al crear la cuenta: ' + Error.message);
         }
     }
 }
