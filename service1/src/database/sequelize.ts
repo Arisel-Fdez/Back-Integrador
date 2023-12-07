@@ -8,7 +8,7 @@ import CategoryModel from '../personalFinances/category/infraestructure/models/c
 export const sequelize = new Sequelize({
     dialect: 'postgres',
     host: 'monorail.proxy.rlwy.net',
-    port: 47762, // Asegúrate de usar el puerto correcto para tu base de datos
+    port: 47762, //Puerto
     database: 'railway',
     username: 'postgres',
     password: '3BfeGBdB*6G*bCBdDEG44b6315eAgFGA',
