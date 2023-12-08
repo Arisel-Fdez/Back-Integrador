@@ -17,7 +17,7 @@ export class UserPublicationController {
                     return res.status(HTTPStatusCodes.BAD_REQUEST).send({ status: "error", message: "Error al subir multimedia." });
                 }
 
-                const userId: number = req.body.userId;
+                const userId: number = parseInt(req.params.userId);
                 const description: string = req.body.description;
 
                 if (req.file) {

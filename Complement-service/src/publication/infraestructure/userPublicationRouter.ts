@@ -20,7 +20,7 @@ userPublicationRouter.use(authMiddleware);
 
 // Ruta para agregar una nueva publicación
 userPublicationRouter.post(
-    "/publish", 
+    "/publish/:userId", 
     userPublicationController.run.bind(userPublicationController)
 );
 

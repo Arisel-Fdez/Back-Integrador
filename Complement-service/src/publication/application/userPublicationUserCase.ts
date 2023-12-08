@@ -2,11 +2,28 @@ import { UserPublication } from "../domain/userPublication";
 import { UserPublicationRepository } from "../domain/userPublicationRepository";
 import { validateOrReject } from 'class-validator';
 import { UserPublicationValidation } from '../domain/validation/userPublicationValidation';
+import { validate } from "class-validator";
+import { json } from "sequelize";
 
 export class UserPublicationUseCase {
     constructor(readonly userPublicationRepository: UserPublicationRepository) {}
 
     async run(userId: number, description: string, multimedia: string): Promise<UserPublication | null> {
+
+
+      /*  const validation = new UserPublicationValidation(userId, description, multimedia);
+
+         const errores = validate(validation);
+         if((await errores).length > 0){
+            console.error("Validation failed",errores);
+            throw new Error(JSON.stringify(errores));
+         }
+         try {
+            const posh= await this.userPublicationRepository.addPublication(userId,description,multimedia);
+return posh;
+         } catch (error) {
+            return null;
+         }*/
         try {
             // Crea una instancia de la clase de validación
             const validation = new UserPublicationValidation(userId, description, multimedia);
