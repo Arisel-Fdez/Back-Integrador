@@ -35,10 +35,10 @@ export class AddUsersController {
             }
         } catch (error: any) {
             if (error.message === 'Validation failed!') {
-                return res.status(HTTPStatusCodes.BAD_REQUEST).send({
+            } else if (error.message === 'Email already registered') {
+                return res.status(HTTPStatusCodes.CONFLICT).send({
                     status: "error",
-                    message: "Error de validación",
-                    details: error.errors
+                    message: "El correo electrónico ya está registrado"
                 });
             }
             console.error("Error in AddUsersController:", error);

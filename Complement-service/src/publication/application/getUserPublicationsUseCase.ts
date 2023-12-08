@@ -7,6 +7,6 @@ export class GetUserPublicationsUseCase {
 
     async run(userId: UserIdValidation): Promise<UserPublication[]> {
         // Realiza la búsqueda de publicaciones solo si la validación pasa
-        return this.userPublicationRepository.getPublicationsByUserId(userId.id);
+        return await this.userPublicationRepository.getPublicationsByUserId(userId.id);
     }
 }

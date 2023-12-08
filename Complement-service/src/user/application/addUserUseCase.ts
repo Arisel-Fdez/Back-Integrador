@@ -18,12 +18,19 @@ export class AddUserUseCase {
         }
 
         try {
+
+            const emailAlreadyExists = await this.userRepository.emailExists(email);
+            if (emailAlreadyExists) {
+                throw { message: 'Email already registered' };
+            }
+
             // Conexión a RabbitMQ
             await this.rabbit.connect();
 
             // Crea el usuario sin foto de perfil
             const createdUser = await this.userRepository.addUser(name, last_name, email, password);
             
+
             if (createdUser === null) {
                 console.error("Error in addUserUseCase: Failed to create user");
                 throw new Error("Failed to create user");

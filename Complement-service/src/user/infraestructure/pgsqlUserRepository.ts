@@ -21,6 +21,11 @@ export class PgsqlUserRepository implements UserRepository {
         }
     }
 
+    async emailExists(email: string): Promise<boolean> {
+        const user = await UserModel.findOne({ where: { email } });
+        return user !== null;
+    }
+
     async updateProfilePicture(userId: string, profilePicture: string): Promise<boolean> {
         try {
             const updated = await UserModel.update({ profilePicture }, { where: { id: userId } });
