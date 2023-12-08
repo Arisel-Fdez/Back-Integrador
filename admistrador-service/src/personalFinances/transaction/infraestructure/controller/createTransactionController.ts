@@ -14,7 +14,7 @@ export class CreateTransactionController {
             if (result instanceof Error) {
                 return res.status(404).send({
                     status: "error",
-                    message: "Error al Crear transaccion",
+                    message: result.message,
                 });
             }
 

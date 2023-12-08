@@ -14,7 +14,6 @@ export async function startOrderConsumer(useCase: CreateTransactionUseCase) {
             const content: any = JSON.parse(msg.content.toString());
             const currentDateTime = new Date();
             // Lógica para procesar la orden pagada
-
             console.log('Mensaje recibido [Y]', content)
             const id = content.data.id;
             const type = content.data.type;

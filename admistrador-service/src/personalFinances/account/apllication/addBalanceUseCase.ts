@@ -5,12 +5,13 @@ import { Validator } from "../domain/validations/validateData";
 
 export class AddBalanceUseCase {
     constructor(readonly accountRepository: AccountRepository, readonly rabbit: RabbitMQService) { }
-    async run(userId: number, balance: number, description: string, categoryId: number): Promise<Account> {
+    async run(userId: number, balance: number, description: string, categoryId: number): Promise<Account | Error> {
         try {
-
             await this.rabbit.connect();
             const addBalance = await this.accountRepository.addBalance(userId, balance, "", 0);
-
+            if (addBalance instanceof Error) {
+                return new Error('No se pudo agregar balance la cuenta');
+            }
             let orderValidate = new Validator<Account>(addBalance);
             await orderValidate.invalidIfHasErrors();
             const data = {
@@ -25,7 +26,7 @@ export class AddBalanceUseCase {
 
             return addBalance;
         } catch (error: any) {
-            throw new Error('Error al agregar balance: ' + error.message);
+            return new Error('Error al agregar balance: ' + error.message);
         }
     }
 }

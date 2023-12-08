@@ -7,14 +7,13 @@ export class GetAllAccountsUseCase {
     constructor(private readonly AccountRepository: AccountRepository) { }
 
     async run(
-    ): Promise<Account[]> {
+    ): Promise<Account[] | Error> {
         try {
 
             const transaccion = await this.AccountRepository.getAllAccounts();
-            
             return transaccion;
         } catch (Error: any) {
-            throw new Error('Error al listar las transacciones: ' + Error.message);
+            return new Error('Error al listar las transacciones: ' + Error.message);
         }
     }
 }

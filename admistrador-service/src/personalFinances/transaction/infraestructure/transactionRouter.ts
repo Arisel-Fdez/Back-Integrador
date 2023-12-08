@@ -4,10 +4,8 @@ import {
     getTransactionController,
     getAllTransacitionsController
 } from "./dependencies";
-import { authMiddleware } from "../../../auth/middlewares/authMiddleware"; 
 
 export const transactionRouter = express.Router();
-transactionRouter.use(authMiddleware);
 
 transactionRouter.get(
     "/get/:id/:accountId",

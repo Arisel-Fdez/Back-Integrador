@@ -15,7 +15,7 @@ app.use(cors());
 
 const signale = new Signale();
 app.use(morgan('dev'));
-const PORT = process.env.PORT || 3001;
+const PORT = 3001;
 
 app.use(express.json());
 app.use("/", accountRouter);

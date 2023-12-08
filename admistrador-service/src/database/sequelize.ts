@@ -5,13 +5,15 @@ import UserModel from '../personalFinances/account/infraestructure/models/userMo
 import TransactionModel from '../personalFinances/transaction/infraestructure/models/transactionModel';
 import CategoryModel from '../personalFinances/category/infraestructure/models/categoryModel';
 
+dotenv.config();
+
 export const sequelize = new Sequelize({
     dialect: 'postgres',
-    host: 'monorail.proxy.rlwy.net',
-    port: 47762, //Puerto
-    database: 'railway',
-    username: 'postgres',
-    password: '3BfeGBdB*6G*bCBdDEG44b6315eAgFGA',
+    host: process.env.HOST,
+    port: process.env.PORT ? parseInt(process.env.PORT, 10) : undefined , //Puerto
+    database: process.env.DATABASE,
+    username: process.env.USER,
+    password: process.env.PASSWORD,
     models: [UserModel,AccountModel, TransactionModel, CategoryModel],
 });
 

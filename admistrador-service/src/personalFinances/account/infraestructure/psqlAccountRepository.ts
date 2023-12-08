@@ -77,14 +77,16 @@ export class PgsqlAccountRepository implements AccountRepository {
     async reduceBalance(userId: number, balance: number): Promise<Account> {
         try {
             const account = await AccountModel.findOne({ where: { userId } });
+            console.log('account', account)
             if (!account) {
+                console.log('first')
                 throw new Error('Cuenta no encontrada');
             }
 
             if (account.balance < balance) {
+                console.log('first2')
                 throw new Error('Saldo insuficiente');
             }
-
             const oldBalance = account.balance;
             const newBalance = oldBalance - balance;
             account.balance = newBalance;

@@ -12,7 +12,7 @@ export class GetAllTransacitionsController {
             if (result instanceof Error) {
                 return res.status(404).send({
                     status: "error",
-                    message: "Error al encontrar la cuenta asociada",
+                    message: result.message,
                 });
             }
 
