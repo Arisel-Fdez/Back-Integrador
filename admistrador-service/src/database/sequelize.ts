@@ -1,19 +1,26 @@
-import dotenv from "dotenv";
 import { Sequelize } from 'sequelize-typescript';
 import AccountModel from '../personalFinances/account/infraestructure/models/accountModel';
 import UserModel from '../personalFinances/account/infraestructure/models/userModel';
 import TransactionModel from '../personalFinances/transaction/infraestructure/models/transactionModel';
 import CategoryModel from '../personalFinances/category/infraestructure/models/categoryModel';
+import dotenv from 'dotenv';
+
+// Carga las variables de entorno desde el archivo .env
+dotenv.config();
+
+
 
 export const sequelize = new Sequelize({
     dialect: 'postgres',
-    host: 'monorail.proxy.rlwy.net',
-    port: 47762, //Puerto
-    database: 'railway',
-    username: 'postgres',
-    password: '3BfeGBdB*6G*bCBdDEG44b6315eAgFGA',
+    host: process.env.DB_HOST,
+    port: 47762, 
+    database: process.env.DB_NAME,
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
     models: [UserModel,AccountModel, TransactionModel, CategoryModel],
 });
+
+
 
 export async function initializeDatabase() {
     try {

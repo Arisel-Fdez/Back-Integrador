@@ -31,7 +31,6 @@ app.use('/api/v1/gps',proxy('http://service-2-env.eba-ghifcebq.us-east-1.elastic
 
 //Local
 //server1
-app.use('/api/v1/login', proxy('http://localhost:3001'));
 app.use('/api/v1/accout', proxy('http://localhost:3001'));
 app.use('/api/v1/transaction', proxy('http://localhost:3001'));
 //server 2

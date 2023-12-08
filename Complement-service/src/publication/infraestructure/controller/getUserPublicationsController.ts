@@ -1,8 +1,9 @@
-// GetUserPublicationsController.js
-
 import { Request, Response } from "express";
 import * as admin from 'firebase-admin';
 import { GetUserPublicationsUseCase } from "../../application/getUserPublicationsUseCase";
+import { UserIdValidation } from "../../domain/validation/userIdValidation"; // Importa la validación
+import { validate } from 'class-validator'; // Importa la función de validación
+import { HTTPStatusCodes } from "../../domain/validation/HTTPStatusCodes"; // Importa los códigos de respuesta HTTP
 
 export class GetUserPublicationsController {
     constructor(private readonly getUserPublicationsUseCase: GetUserPublicationsUseCase) {}
@@ -10,11 +11,19 @@ export class GetUserPublicationsController {
     async run(req: Request, res: Response) {
         try {
             const userId = parseInt(req.params.userId);
-            if (isNaN(userId)) {
-                return res.status(400).send({ status: "error", message: "ID de usuario inválido." });
+            const userIdValidation = new UserIdValidation(userId); // Valida el ID de usuario
+
+            // Verifica si la validación falla y devuelve un código de respuesta HTTP 400 si es así
+            const validationErrors = await validate(userIdValidation);
+            if (validationErrors.length > 0) {
+                return res.status(HTTPStatusCodes.BAD_REQUEST).send({
+                    status: "error",
+                    message: "Errores de validación en los parámetros de entrada.",
+                    validationErrors,
+                });
             }
 
-            let publications = await this.getUserPublicationsUseCase.run(userId);
+            let publications = await this.getUserPublicationsUseCase.run(userIdValidation);
 
             // Procesa cada publicación para obtener URLs firmadas
             publications = await Promise.all(publications.map(async publication => {
@@ -22,10 +31,13 @@ export class GetUserPublicationsController {
                 return publication;
             }));
 
-            res.status(200).send({ status: "success", data: publications });
+            res.status(HTTPStatusCodes.OK).send({ status: "success", data: publications });
         } catch (error) {
             console.error("Error en GetUserPublicationsController:", error);
-            res.status(500).send({ status: "error", message: "Error interno del servidor." });
+            res.status(HTTPStatusCodes.INTERNAL_SERVER_ERROR).send({
+                status: "error",
+                message: "Error interno del servidor."
+            });
         }
     }
 

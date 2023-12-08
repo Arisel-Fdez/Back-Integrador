@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import * as admin from 'firebase-admin';
 import { ViewVideosUseCase } from "../../application/viewVideosUseCase";
+import { HTTPStatusCodes } from "../../domain/validation/HTTPStatusCodes";
 
 export class ViewVideosController {
     constructor(private viewVideosUseCase: ViewVideosUseCase) {}
@@ -28,6 +29,6 @@ export class ViewVideosController {
             return publication;
         }));
 
-        res.status(200).send(publicationsWithDownloadURLs);
+        res.status(HTTPStatusCodes.OK).send(publicationsWithDownloadURLs); 
     }
 }

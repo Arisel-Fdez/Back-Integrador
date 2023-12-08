@@ -8,9 +8,7 @@ import { authRouter } from './auth/infraestructure/authRouter';
 import * as admin from 'firebase-admin';
 import serviceAccount from './user/infraestructure/backsocialmovil-firebase.json';
 import { userPublicationRouter } from './publication/infraestructure/userPublicationRouter';
-import { likeRouter } from './reaction/infraestructure/likeRouter';
 import { commentRouter } from './comment/infraestructure/commentRouter';
-import { coordinateRouter } from './location/infraestructure/coordinateRouter';
 
 const app = express();
 app.use(cors());
@@ -22,9 +20,7 @@ app.use(express.json());
 app.use('/',userRouter);
 app.use("/",authRouter);
 app.use('/',userPublicationRouter);
-app.use('/',likeRouter)
 app.use('/',commentRouter)
-app.use('/',coordinateRouter)
 
 async function startServer() {
     try {
