@@ -6,6 +6,8 @@ import { ListAllUsersController } from "./controller/listAllUserController";
 import { ListAllUserUseCase } from "../application/listAllUserUseCase";
 import { DeleteUserUseCase } from "../application/deleteUserUseCase";
 import { DeleteUserController } from "./controller/deleteUserController";
+import { UploadProfilePictureController } from "./controller/uploadProfilePictureController";
+import { UploadProfilePictureUseCase } from "../application/uploadProfilePictureUseCase";
 import { RabbitMQ } from "./services/rabbit";
 
 
@@ -22,3 +24,5 @@ export const listAllUsersController = new ListAllUsersController(listAllUsersUse
 export const deletedUsersUseCase = new DeleteUserUseCase(pgsqlUsersRepository);
 export const deleteUserController = new DeleteUserController(deletedUsersUseCase);
 
+export const uploadProfilePictureUseCase = new UploadProfilePictureUseCase(pgsqlUsersRepository);
+export const uploadProfilePictureController = new UploadProfilePictureController(uploadProfilePictureUseCase);

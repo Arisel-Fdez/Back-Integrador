@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import * as admin from 'firebase-admin';
 import { ViewPDFUseCase } from "../../application/viewPDFsUseCase";
+import { HTTPStatusCodes } from "../../domain/validation/HTTPStatusCodes";
 
 export class ViewPDFController {
     constructor(private viewPDFUseCase: ViewPDFUseCase) {}
@@ -28,6 +29,6 @@ export class ViewPDFController {
             return publication;
         }));
 
-        res.status(200).send(publicationsWithDownloadURLs);
+        res.status(HTTPStatusCodes.OK).send(publicationsWithDownloadURLs); 
     }
 }

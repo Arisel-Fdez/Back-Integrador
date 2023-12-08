@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { ViewPublicationsUseCase } from "../../application/viewPublicationUseCase";
 import * as admin from 'firebase-admin';
+import { HTTPStatusCodes } from "../../domain/validation/HTTPStatusCodes";
 
 export class ViewPublicationsController {
     constructor(readonly viewPublicationsUseCase: ViewPublicationsUseCase) {}
@@ -28,7 +29,7 @@ export class ViewPublicationsController {
             return publication;
         }));
 
-        res.status(200).send(publicationsWithDownloadURLs);
+        res.status(HTTPStatusCodes.OK).send(publicationsWithDownloadURLs); ;
     }
 
     

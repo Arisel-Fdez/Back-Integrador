@@ -5,6 +5,6 @@ export class User {
         readonly last_name: string,
         readonly email: string,
         readonly password: string,
-        public  profilePicture: string 
+        public  profilePicture?: string 
     ) { }
 }

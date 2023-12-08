@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import { AuthUseCase } from '../../application/authUseCase';
+import { HTTPStatusCodes } from '../../../user/domain/validation/HTTPStatusCodes';
+
 
 export class AuthController {
     constructor(private authUseCase: AuthUseCase) {}
@@ -9,9 +11,9 @@ export class AuthController {
         const result = await this.authUseCase.run(email, password);
         
         if (result.status === 'success' && result.token) {
-            res.status(200).send({ status: 'success', token: result.token, userId: result.userId });
+            res.status(HTTPStatusCodes.OK).send({ status: 'success', token: result.token, userId: result.userId }); 
         } else {
-            res.status(401).send(result);
+            res.status(HTTPStatusCodes.UNAUTHORIZED).send(result); 
         }
     }
 }

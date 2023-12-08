@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { UserPublicationUseCase } from "../../application/userPublicationUserCase";
 import multer from 'multer';
 import * as admin from 'firebase-admin';
+import { HTTPStatusCodes } from '../../domain/validation/HTTPStatusCodes'; // Asegúrate de que la ruta de importación sea correcta
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
@@ -13,10 +14,9 @@ export class UserPublicationController {
         try {
             upload.single('multimedia')(req, res, async (err) => {
                 if (err) {
-                    return res.status(400).send({ status: "error", message: "Error al subir multimedia." });
+                    return res.status(HTTPStatusCodes.BAD_REQUEST).send({ status: "error", message: "Error al subir multimedia." });
                 }
 
-                // Utilizamos userId como un número directamente
                 const userId: number = req.body.userId;
                 const description: string = req.body.description;
 
@@ -27,7 +27,7 @@ export class UserPublicationController {
 
                     blobStream.on('error', (err) => {
                         console.error('Error al subir archivo:', err);
-                        return res.status(500).send({ status: "error", message: "Error al subir multimedia a Firebase." });
+                        return res.status(HTTPStatusCodes.INTERNAL_SERVER_ERROR).send({ status: "error", message: "Error al subir multimedia a Firebase." });
                     });
 
                     blobStream.on('finish', async () => {
@@ -38,11 +38,11 @@ export class UserPublicationController {
                             createdPublication = await this.userPublicationUseCase.run(userId, description, publicUrl);
                         } catch (useCaseError) {
                             console.error('Error al crear la publicación:', useCaseError);
-                            return res.status(500).send({ status: "error", message: "Error al procesar la publicación." });
+                            return res.status(HTTPStatusCodes.INTERNAL_SERVER_ERROR).send({ status: "error", message: "Error al procesar la publicación." });
                         }
 
                         if (createdPublication) {
-                            return res.status(201).send({
+                            return res.status(HTTPStatusCodes.CREATED).send({
                                 status: "success",
                                 data: {
                                     id: createdPublication.id,
@@ -52,7 +52,7 @@ export class UserPublicationController {
                                 message: "Publicación creada exitosamente."
                             });
                         } else {
-                            return res.status(400).send({
+                            return res.status(HTTPStatusCodes.BAD_REQUEST).send({
                                 status: "error",
                                 data: [],
                                 message: "No se pudo crear la publicación, intente más tarde."
@@ -62,12 +62,12 @@ export class UserPublicationController {
 
                     blobStream.end(req.file.buffer);
                 } else {
-                    return res.status(400).send({ status: "error", message: "Se requiere multimedia." });
+                    return res.status(HTTPStatusCodes.BAD_REQUEST).send({ status: "error", message: "Se requiere multimedia." });
                 }
             });
         } catch (error) {
             console.error("Error en UserPublicationController:", error);
-            res.status(500).send({
+            res.status(HTTPStatusCodes.INTERNAL_SERVER_ERROR).send({
                 status: "error",
                 message: "Error interno del servidor."
             });

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { ViewAudiosUseCase } from "../../application/viewAudioUseCase";
 import * as admin from 'firebase-admin';
+import { HTTPStatusCodes } from "../../domain/validation/HTTPStatusCodes";
 
 export class ViewAudiosController {
     constructor(private viewAudiosUseCase: ViewAudiosUseCase) {}
@@ -28,6 +29,6 @@ export class ViewAudiosController {
             return publication;
         }));
 
-        res.status(200).send(publicationsWithDownloadURLs);
+        res.status(HTTPStatusCodes.OK).send(publicationsWithDownloadURLs); 
     }
 }

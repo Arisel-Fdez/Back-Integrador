@@ -4,14 +4,30 @@ import UserModel from "./models/userModel";
 
 export class PgsqlUserRepository implements UserRepository {
 
-    async addUser(name: string, last_name: string, email: string, password: string, profilePicture: string): Promise<User | null> {
+    async addUser(name: string, last_name: string, email: string, password: string, profilePicture?: string): Promise<User | null> {
         try {
-            const createdUser = await UserModel.create({ name, last_name, email, password, profilePicture });
+            const createdUser = await UserModel.create({ 
+                name, 
+                last_name, 
+                email, 
+                password, 
+                profilePicture // Esto se manejará correctamente como undefined si no se proporciona
+            });
 
             return new User(createdUser.id, createdUser.name, createdUser.last_name, createdUser.email, createdUser.password, createdUser.profilePicture);
         } catch (error) {
             console.error("Error in PgsqlUserRepository:", error);
             return null;
+        }
+    }
+
+    async updateProfilePicture(userId: string, profilePicture: string): Promise<boolean> {
+        try {
+            const updated = await UserModel.update({ profilePicture }, { where: { id: userId } });
+            return updated[0] > 0;
+        } catch (error) {
+            console.error("Error in PgsqlUserRepository:", error);
+            return false;
         }
     }
 
